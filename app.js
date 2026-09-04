@@ -469,7 +469,7 @@ function renderMyProfileView(container) {
   container.innerHTML = html;
 }
 
-// RATING MODAL & SLIDERS LOGIC
+// RATING MODAL & SLIDERS LOGIC (INTEGER SCALE 0-10)
 function renderSlidersInModal() {
   const container = document.getElementById('sliders-container');
   if (!container) return;
@@ -478,16 +478,16 @@ function renderSlidersInModal() {
     <div class="rating-slider-item">
       <div class="slider-label-row">
         <span>${c.name}</span>
-        <span class="slider-val" id="val-display-${c.id}">8.0</span>
+        <span class="slider-val" id="val-display-${c.id}">8</span>
       </div>
       <input 
         type="range" 
         min="0" 
         max="10" 
-        step="0.5" 
-        value="8.0" 
+        step="1" 
+        value="8" 
         id="slider-${c.id}"
-        oninput="document.getElementById('val-display-${c.id}').innerText = parseFloat(this.value).toFixed(1)"
+        oninput="document.getElementById('val-display-${c.id}').innerText = this.value"
       >
     </div>
   `).join('');
@@ -498,11 +498,11 @@ function openRatingModal() {
   document.getElementById('rating-modal-phone').innerText = `Номер: ${contact.phone} (${contact.name})`;
   
   CRITERIA_MAP.forEach(c => {
-    const val = contact.ratings[c.id] || 8.0;
+    const val = Math.round(contact.ratings[c.id] || 8);
     const slider = document.getElementById(`slider-${c.id}`);
     const display = document.getElementById(`val-display-${c.id}`);
     if (slider) slider.value = val;
-    if (display) display.innerText = val.toFixed(1);
+    if (display) display.innerText = val;
   });
 
   openModal('modal-rating');
