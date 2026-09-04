@@ -26,7 +26,6 @@ const CONTACTS_DATA = [
     totalReviews: 42,
     tier: 'ВЫСОКИЙ УРОВЕНЬ ДОВЕРИЯ',
     tierClass: 'verified-badge',
-    isVerifiedOwner: true,
     ratings: {
       honesty: 9.2, decency: 9.0, responsibility: 8.8, promises: 8.9, financial: 9.5,
       communication: 8.6, punctuality: 8.4, no_brag: 7.9, negotiability: 8.7, repeat_intent: 9.1
@@ -40,7 +39,6 @@ const CONTACTS_DATA = [
     totalReviews: 18,
     tier: 'НАДЕЖНЫЙ ПАРТНЕР',
     tierClass: 'tier-badge',
-    isVerifiedOwner: false,
     ratings: {
       honesty: 7.8, decency: 7.5, responsibility: 7.9, promises: 7.4, financial: 8.0,
       communication: 7.6, punctuality: 7.2, no_brag: 6.8, negotiability: 8.2, repeat_intent: 7.5
@@ -54,7 +52,6 @@ const CONTACTS_DATA = [
     totalReviews: 12,
     tier: 'ПОДОЗРИТЕЛЬНЫЙ НОМЕР',
     tierClass: 'risk-badge',
-    isVerifiedOwner: false,
     ratings: {
       honesty: 3.2, decency: 3.5, responsibility: 2.9, promises: 3.1, financial: 3.8,
       communication: 4.0, punctuality: 3.0, no_brag: 2.1, negotiability: 4.2, repeat_intent: 3.0
@@ -68,7 +65,6 @@ const CONTACTS_DATA = [
     totalReviews: 0,
     tier: 'НОВЫЙ НОМЕР',
     tierClass: 'tier-badge',
-    isVerifiedOwner: false,
     ratings: {
       honesty: 5.0, decency: 5.0, responsibility: 5.0, promises: 5.0, financial: 5.0,
       communication: 5.0, punctuality: 5.0, no_brag: 5.0, negotiability: 5.0, repeat_intent: 5.0
@@ -82,7 +78,6 @@ const CONTACTS_DATA = [
     totalReviews: 1, // Below minimum 3 ratings threshold
     tier: 'НЕДОСТАТОЧНО ОЦЕНОК',
     tierClass: 'tier-badge',
-    isVerifiedOwner: false,
     ratings: {
       honesty: 6.0, decency: 6.0, responsibility: 6.0, promises: 6.0, financial: 6.0,
       communication: 6.0, punctuality: 6.0, no_brag: 6.0, negotiability: 6.0, repeat_intent: 6.0
@@ -97,9 +92,8 @@ const MY_PROFILE_DATA = {
   phone: '+7 (900) 111-22-33',
   hasRating: true,
   totalReviews: 27,
-  tier: 'ПОДТВЕРЖДЕННЫЙ ВЛАДЕЛЕЦ',
+  tier: 'МОЙ ПРОФИЛЬ',
   tierClass: 'verified-badge',
-  isVerifiedOwner: true,
   ratings: {
     honesty: 9.4, decency: 9.1, responsibility: 9.0, promises: 9.3, financial: 9.2,
     communication: 9.5, punctuality: 8.9, no_brag: 8.8, negotiability: 9.0, repeat_intent: 9.6
@@ -108,12 +102,12 @@ const MY_PROFILE_DATA = {
 
 // APP STATE
 let currentTab = 'contacts'; // 'contacts' | 'my-profile' | 'detail'
-let contactFilter = 'rated'; // 'rated' | 'unrated'
+let contactFilter = 'all'; // 'all' | 'rated'
 let searchQuery = '';
 let selectedContactId = null;
 let isContactsSynced = false;
 
-// Calculate Overall Trust Score (e.g. 8.8 / 10)
+// Calculate Overall Trust Score (e.g. 8.8)
 function calculateTrustScore(profile) {
   const keys = Object.keys(profile.ratings);
   const avg = keys.reduce((sum, key) => sum + profile.ratings[key], 0) / keys.length;
@@ -181,7 +175,7 @@ function renderAppView() {
 function renderContactsListView(container) {
   let list = CONTACTS_DATA.filter(c => {
     const matchesSearch = c.name.toLowerCase().includes(searchQuery) || c.phone.includes(searchQuery);
-    const matchesFilter = contactFilter === 'rated' ? c.hasRating : !c.hasRating;
+    const matchesFilter = contactFilter === 'rated' ? c.hasRating : true;
     return matchesSearch && matchesFilter;
   });
 
@@ -191,8 +185,8 @@ function renderContactsListView(container) {
     html += `
       <div style="background: rgba(245, 196, 83, 0.12); border: 1px solid var(--border-gold); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
         <div>
-          <div style="font-size: 12px; font-weight: 700; color: var(--primary-gold); flex: 1;">⚠️ Данные контактов не актуальны</div>
-          <div style="font-size: 10px; color: var(--text-muted);">Разрешите доступ для обновления рейтингов</div>
+          <div style="font-size: 12px; font-weight: 700; color: var(--primary-gold);">⚠️ Данные контактов не актуальны</div>
+          <div style="font-size: 10px; color: var(--text-muted);">Нажмите кнопку для обновления телефонной книги</div>
         </div>
         <button class="contacts-btn" style="position: static;" onclick="openSyncPermissionModal()">
           Синхронизировать
@@ -203,16 +197,16 @@ function renderContactsListView(container) {
 
   html += `
     <div class="filter-pills-bar">
-      <div class="filter-pill ${contactFilter === 'rated' ? 'active' : ''}" onclick="setContactFilter('rated')">
-        ⭐ С рейтингом (${CONTACTS_DATA.filter(c => c.hasRating).length})
+      <div class="filter-pill ${contactFilter === 'all' ? 'active' : ''}" onclick="setContactFilter('all')">
+        👥 Все (${CONTACTS_DATA.length})
       </div>
-      <div class="filter-pill ${contactFilter === 'unrated' ? 'active' : ''}" onclick="setContactFilter('unrated')">
-        🔒 Без рейтинга (${CONTACTS_DATA.filter(c => !c.hasRating).length})
+      <div class="filter-pill ${contactFilter === 'rated' ? 'active' : ''}" onclick="setContactFilter('rated')">
+        ⭐ Только с рейтингом (${CONTACTS_DATA.filter(c => c.hasRating).length})
       </div>
     </div>
 
     <div style="font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 12px;">
-      ${contactFilter === 'rated' ? 'Телефонная книга — Номера с рейтингом:' : 'Телефонная книга — Новые номера без рейтинга:'}
+      ${contactFilter === 'rated' ? 'Контакты только с имеющимися отзывами:' : 'Все контакты из вашей телефонной книги:'}
     </div>
   `;
 
@@ -240,7 +234,7 @@ function renderContactsListView(container) {
           <div>
             ${c.hasRating ? `
               <div class="contact-rating-badge">
-                ★ ${score} / 10
+                ★ ${score}
               </div>
             ` : `
               <div class="contact-rating-badge no-rating">
@@ -262,7 +256,6 @@ function renderContactDetailView(container) {
   const trustScore = calculateTrustScore(contact);
   const isBelowThreshold = contact.totalReviews < 3;
 
-  // 6 Highlight Core Attributes
   const highlights = [
     { name: 'Честность', val: contact.ratings.honesty },
     { name: 'Ответственность', val: contact.ratings.responsibility },
@@ -285,7 +278,6 @@ function renderContactDetailView(container) {
         <div class="trust-card-header">
           <div class="trust-score-box">
             <span class="trust-score-num">${isBelowThreshold ? '?' : trustScore}</span>
-            <span class="trust-score-max">/ 10</span>
           </div>
 
           <div class="trust-card-badge-box">
@@ -309,7 +301,7 @@ function renderContactDetailView(container) {
             <div style="font-size: 26px; margin-bottom: 6px;">🔒</div>
             <div style="font-size: 14px; font-weight: 700; color: var(--primary-gold);">Рейтинг скрыт до 3 оценок</div>
             <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
-              Публичный сигналTrust Score формируется только при наличии 3 и более независимых оценок.
+              Публичный сигнал Trust Score формируется только при наличии 3 и более независимых оценок.
             </div>
           </div>
         ` : `
@@ -331,7 +323,7 @@ function renderContactDetailView(container) {
 
         <div class="trust-card-footer">
           <span>Trust Index Protocol</span>
-          <span>Verified Signal</span>
+          <span>Anonymous Reputation</span>
         </div>
 
       </div>
@@ -362,7 +354,7 @@ function renderContactDetailView(container) {
                   <i data-feather="${c.icon}" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
                   ${c.name}
                 </div>
-                <div class="criteria-val">${val.toFixed(1)} / 10</div>
+                <div class="criteria-val">${val.toFixed(1)}</div>
               </div>
               <div class="bar-track">
                 <div class="bar-fill" style="width: ${val * 10}%;"></div>
@@ -392,11 +384,6 @@ function renderMyProfileView(container) {
   ];
 
   let html = `
-    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 12px; margin-bottom: 16px; font-size: 12px; color: var(--accent-emerald); display: flex; align-items: center; gap: 8px;">
-      <i data-feather="check-circle" style="width: 18px; height: 18px; flex-shrink: 0;"></i>
-      <div><b>Ваш личный профиль верифицирован.</b> Другие пользователи видят эту карточку анонимно.</div>
-    </div>
-
     <!-- Clean Trust Index Reputation Card -->
     <div class="trust-card-container">
       <div class="trust-card">
@@ -404,12 +391,11 @@ function renderMyProfileView(container) {
         <div class="trust-card-header">
           <div class="trust-score-box">
             <span class="trust-score-num">${trustScore}</span>
-            <span class="trust-score-max">/ 10</span>
           </div>
 
           <div class="trust-card-badge-box">
             <span class="tier-badge ${profile.tierClass}">
-              ✓ ${profile.tier}
+              ${profile.tier}
             </span>
             <span class="reviews-count-badge">
               <i data-feather="users" style="width: 12px; height: 12px;"></i>
@@ -440,7 +426,7 @@ function renderMyProfileView(container) {
 
         <div class="trust-card-footer">
           <span>Trust Index Protocol</span>
-          <span>Verified Owner Signal</span>
+          <span>Anonymous Reputation</span>
         </div>
 
       </div>
@@ -469,7 +455,7 @@ function renderMyProfileView(container) {
                 <i data-feather="${c.icon}" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
                 ${c.name}
               </div>
-              <div class="criteria-val">${val.toFixed(1)} / 10</div>
+              <div class="criteria-val">${val.toFixed(1)}</div>
             </div>
             <div class="bar-track">
               <div class="bar-fill" style="width: ${val * 10}%;"></div>
@@ -574,7 +560,6 @@ function dismissNotifications() {
 // INITIAL ONBOARDING RATING NOTIFICATION HANDLER
 function viewMyRatingOnboarding() {
   closeModal('modal-welcome-notif');
-  // Immediately open contact sync permission popup!
   openModal('modal-sync-permission');
 }
 
