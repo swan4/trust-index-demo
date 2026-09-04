@@ -9,28 +9,8 @@
 </head>
 <body>
 
-  <!-- Floating Frame Control for Client Demo -->
-  <div class="device-toggle-bar">
-    <button class="device-btn active" id="btn-device-frame" onclick="toggleDeviceMode('frame')">
-      📱 Mobile Frame
-    </button>
-    <button class="device-btn" id="btn-full-screen" onclick="toggleDeviceMode('full')">
-      🖥️ Full View
-    </button>
-  </div>
-
-  <!-- Main Mobile App Container -->
-  <div class="app-wrapper device-frame" id="app-wrapper">
-
-    <!-- Mobile Top Status Bar -->
-    <div class="status-bar">
-      <span>09:41</span>
-      <div class="notch"></div>
-      <div style="display: flex; gap: 6px; align-items: center;">
-        <span>5G</span>
-        <i data-feather="battery" style="width: 13px; height: 13px;"></i>
-      </div>
-    </div>
+  <!-- Main App Container -->
+  <div class="app-wrapper" id="app-wrapper">
 
     <!-- NON-DISMISSIBLE STICKY SMS NOTIFICATION BANNER AT TOP -->
     <div class="sticky-sms-banner">
