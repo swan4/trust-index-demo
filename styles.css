@@ -530,93 +530,59 @@ body {
 }
 
 /* ==========================================================================
-   FIFA PLAYER CARD (The Hero Element)
+   TRUST INDEX REPUTATION CARD (Clean Product Concept)
    ========================================================================== */
 
-.fifa-card-container {
-  perspective: 1000px;
+.trust-card-container {
   margin: 10px 0 24px 0;
   display: flex;
   justify-content: center;
 }
 
-.fifa-card {
+.trust-card {
   width: 100%;
   max-width: 360px;
-  background: linear-gradient(165deg, #1e2638 0%, #111726 60%, #0d121f 100%);
+  background: linear-gradient(165deg, #182236 0%, #0f172a 60%, #090e1a 100%);
   border-radius: 24px;
-  padding: 24px 20px;
+  padding: 22px 20px;
   position: relative;
   overflow: hidden;
-  border: 2px solid var(--primary-gold);
-  box-shadow: var(--shadow-fifa);
-  transition: transform 0.5s ease;
-  transform-style: preserve-3d;
+  border: 1.5px solid var(--border-gold);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 196, 83, 0.15);
 }
 
-/* FIFA Holographic Shimmer */
-.fifa-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 35%,
-    rgba(255, 255, 255, 0.08) 45%,
-    rgba(245, 196, 83, 0.15) 50%,
-    rgba(255, 255, 255, 0.08) 55%,
-    transparent 65%
-  );
-  transform: rotate(25deg);
-  pointer-events: none;
-  animation: shine 6s infinite linear;
-}
-
-@keyframes shine {
-  0% { transform: translateY(-100%) rotate(25deg); }
-  100% { transform: translateY(100%) rotate(25deg); }
-}
-
-/* Card Header: Score Badge & Meta */
-.fifa-card-header {
+/* Card Header: Score & Badge */
+.trust-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 16px;
-  position: relative;
-  z-index: 2;
 }
 
-.fifa-overall-score {
+.trust-score-box {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: baseline;
+  gap: 4px;
 }
 
-.overall-num {
+.trust-score-num {
   font-family: var(--font-heading);
-  font-size: 52px;
+  font-size: 46px;
   font-weight: 900;
   line-height: 1;
   background: var(--gold-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
 }
 
-.overall-label {
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  color: var(--primary-gold);
-  text-transform: uppercase;
-  margin-top: 2px;
+.trust-score-max {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dim);
 }
 
-.fifa-card-badge-box {
+.trust-card-badge-box {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -648,6 +614,100 @@ body {
   background: rgba(244, 63, 94, 0.15);
   color: var(--accent-rose);
   border-color: rgba(244, 63, 94, 0.4);
+}
+
+.reviews-count-badge {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Phone Identity Display */
+.trust-identity {
+  margin-bottom: 20px;
+}
+
+.trust-phone-number {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.trust-phone-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Core Highlight Attributes Grid */
+.trust-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 14px;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 16px;
+  border: 1px solid var(--border-glass);
+  margin-bottom: 16px;
+}
+
+.trust-stat-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trust-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.trust-stat-title {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.trust-stat-val {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.trust-stat-val.high { color: var(--accent-emerald); }
+.trust-stat-val.med { color: var(--primary-gold); }
+.trust-stat-val.low { color: var(--accent-rose); }
+
+.trust-mini-bar {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.trust-mini-fill {
+  height: 100%;
+  background: var(--gold-gradient);
+  border-radius: 2px;
+}
+
+/* Card Footer */
+.trust-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 12px;
 }
 
 .reviews-count-badge {
