@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Trust Index — Мобильная Анонимная Репутация</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Feather Icons for vector icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body>
+
+  <!-- Floating Frame Control for Client Demo (Mobile Shell vs Fullscreen) -->
+  <div class="device-toggle-bar">
+    <button class="device-btn active" id="btn-device-frame" onclick="toggleDeviceMode('frame')">
+      📱 Mobile Frame
+    </button>
+    <button class="device-btn" id="btn-full-screen" onclick="toggleDeviceMode('full')">
+      🖥️ Full View
+    </button>
+  </div>
+
+  <!-- Live SMS Push Notification Toast Simulator -->
+  <div class="sms-toast-container" id="sms-toast">
+    <div class="sms-icon">💬</div>
+    <div class="sms-content">
+      <div class="sms-title">
+        <span>Trust Index Notification</span>
+        <span class="sms-time">Только что</span>
+      </div>
+      <div class="sms-text" id="sms-toast-text">
+        Ваш номер получил новую анонимную оценку! Нажмите, чтобы открыть Trust Index.
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Mobile App Container -->
+  <div class="app-wrapper device-frame" id="app-wrapper">
+
+    <!-- Mobile Top Status Bar -->
+    <div class="status-bar">
+      <span>09:41</span>
+      <div class="notch"></div>
+      <div style="display: flex; gap: 6px; align-items: center;">
+        <span>5G</span>
+        <i data-feather="battery" style="width: 14px; height: 14px;"></i>
+      </div>
+    </div>
+
+    <!-- App Header & Phone Search -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="brand-logo">
+          <div class="brand-shield">TI</div>
+          <span>Trust Index</span>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" onclick="toggleAdminMode()" title="Режим Администратора">
+            <i data-feather="shield"></i>
+            <span class="badge-dot"></span>
+          </button>
+          <button class="icon-btn" onclick="openLegalModal()" title="Правовая информация">
+            <i data-feather="info"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Phone Search Input -->
+      <div class="search-container">
+        <div class="search-input-wrapper">
+          <i data-feather="search" class="search-icon"></i>
+          <input 
+            type="text" 
+            class="search-input" 
+            id="phone-search-input"
+            placeholder="+7 (999) 000-00-00" 
+            value="+7 (999) 456-78-90" 
+            oninput="handlePhoneInput(this.value)"
+          >
+          <button class="contacts-btn" onclick="openContactsModal()">
+            📇 Книжка
+          </button>
+        </div>
+
+        <!-- Preset Mock Numbers for Quick Presentation -->
+        <div class="presets-scroll">
+          <div class="preset-chip active" onclick="selectPreset('alex')">
+            🌟 Александр (Инвестор)
+          </div>
+          <div class="preset-chip" onclick="selectPreset('dmitry')">
+            🤝 Дмитрий (Риелтор)
+          </div>
+          <div class="preset-chip" onclick="selectPreset('suspicious')">
+            ⚠️ Неизвестный (Перекуп)
+          </div>
+          <div class="preset-chip" onclick="selectPreset('my_num')">
+            📱 Мой номер (+7 900 111-22-33)
+          </div>
+          <div class="preset-chip" onclick="selectPreset('new_num')">
+            🆕 Новый номер (0 оценок)
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Screen Content Area -->
+    <main class="app-content" id="app-main-content">
+      
+      <!-- Content Dynamically Rendered by app.js (FIFA Card, Criteria Breakdown, Owner Status, Admin View) -->
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" id="nav-search" onclick="switchTab('search')">
+        <i data-feather="search"></i>
+        <span>Поиск</span>
+      </button>
+      <button class="nav-item" id="nav-my-card" onclick="selectPreset('my_num'); switchTab('my-card');">
+        <i data-feather="user-check"></i>
+        <span>Моя карточка</span>
+      </button>
+      <button class="nav-item" id="nav-disputes" onclick="openDisputeModal()">
+        <i data-feather="alert-triangle"></i>
+        <span>Жалобы</span>
+      </button>
+      <button class="nav-item" id="nav-admin" onclick="toggleAdminMode()">
+        <i data-feather="sliders"></i>
+        <span>Антифрод / Админ</span>
+      </button>
+    </nav>
+
+  </div> <!-- End App Wrapper -->
+
+
+  <!-- ==========================================================================
+       BOTTOM SHEET MODAL: ADD / EDIT ANONYMOUS RATING
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-rating">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div>
+          <div class="sheet-title">Анонимная оценка</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;" id="rating-modal-phone">
+            Номер: +7 (999) 456-78-90
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('modal-rating')">✕</button>
+      </div>
+
+      <!-- Anonymity Banner -->
+      <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 10px 12px; margin-bottom: 16px; font-size: 11px; color: var(--text-muted);">
+        🔒 <b>100% Анонимно:</b> Автор не виден в профиле. 1 аккаунт = 1 актуальная оценка. При повторной оценке прошлый балл обновляется.
+      </div>
+
+      <!-- 10 Criteria Interactive Sliders Form -->
+      <form id="rating-form" onsubmit="submitRating(event)">
+        <div id="sliders-container">
+          <!-- Dynamically populated by JS -->
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 16px;">
+          <span>Отправить анонимную оценку</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: OWNER PHONE VERIFICATION (OTP SMS CODE)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-otp">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div>
+          <div class="sheet-title">Подтверждение владения</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+            Владелец номера получает расширенную статистику
+          </div>
+        </div>
+        <button class="close-btn" onclick="closeModal('modal-otp')">✕</button>
+      </div>
+
+      <div style="text-align: center; margin: 10px 0;">
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+          Мы отправили одноразовый SMS-код подтверждения на номер <br>
+          <strong style="color: var(--primary-gold);" id="otp-target-phone">+7 (900) 111-22-33</strong>
+        </p>
+      </div>
+
+      <div class="otp-input-container">
+        <input type="text" class="otp-box" maxlength="1" value="4" id="otp-1">
+        <input type="text" class="otp-box" maxlength="1" value="8" id="otp-2">
+        <input type="text" class="otp-box" maxlength="1" value="1" id="otp-3">
+        <input type="text" class="otp-box" maxlength="1" value="5" id="otp-4">
+      </div>
+
+      <div style="text-align: center; font-size: 11px; color: var(--text-dim); margin-bottom: 20px;">
+        Для демо-клиента: введите любой 4-значный код (например, 4815)
+      </div>
+
+      <button type="button" class="btn-primary" style="width: 100%;" onclick="confirmOtp()">
+        Подтвердить и открыть владельцу
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: SIMULATE PHONEBOOK CONTACTS IMPORT
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-contacts">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title">Телефонная книга</div>
+        <button class="close-btn" onclick="closeModal('modal-contacts')">✕</button>
+      </div>
+
+      <div style="background: rgba(245, 196, 83, 0.1); border: 1px solid var(--border-gold); border-radius: 12px; padding: 10px 12px; margin-bottom: 14px; font-size: 11px; color: var(--text-muted);">
+        🛡️ <b>Конфиденциальность:</b> Синхронизация хэширует номера. Телефонная книга НЕ становится частью публичной базы.
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 8px;" id="contacts-list">
+        <!-- Contacts populated via JS -->
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: REPORT ABUSE / DISPUTE RATING
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-dispute">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title">Оспаривание & Жалоба</div>
+        <button class="close-btn" onclick="closeModal('modal-dispute')">✕</button>
+      </div>
+
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+        Если вы считаете, что ваш рейтинг подвергается накрутке или атаке конкурентов, антифрод-система повторно проанализирует подозрительную активность.
+      </p>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 12px; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 6px;">Причина обращения</label>
+        <select id="dispute-reason" style="width: 100%; height: 44px; background: var(--bg-surface); border: 1px solid var(--border-glass); border-radius: 12px; color: #fff; padding: 0 12px; font-size: 13px;">
+          <option>Подозрение на заказную атакующую накрутку (Coordinated Abuse)</option>
+          <option>Аномальный всплеск низких оценок за короткий промежуток</option>
+          <option>Ошибка привязки номера телефона</option>
+          <option>Запрос на юридическое оспаривание (US Legal / CCPA / FCRA Notice)</option>
+        </select>
+      </div>
+
+      <button type="button" class="btn-primary" style="width: 100%;" onclick="submitDispute()">
+        Отправить запрос в модерацию
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ==========================================================================
+       MODAL: LEGAL & US COMPLIANCE NOTICE
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-legal">
+    <div class="bottom-sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <div class="sheet-title">Правовой блок (US Legal & FCRA)</div>
+        <button class="close-btn" onclick="closeModal('modal-legal')">✕</button>
+      </div>
+
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.6; max-height: 60vh; overflow-y: auto; padding-right: 6px;">
+        <div style="background: rgba(245, 196, 83, 0.15); border-left: 3px solid var(--primary-gold); padding: 10px; border-radius: 8px; margin-bottom: 12px; color: var(--text-main); font-weight: 600;">
+          💡 Продуктовый принцип: Trust Index — это агрегированный сигнал доверия по критериям взаимодействия, а не вердикт о «хорошести» человека.
+        </div>
+
+        <p style="margin-bottom: 10px;">
+          <b>FCRA Compliance (Fair Credit Reporting Act):</b> Сервис Trust Index не является Кредитным агентством (Consumer Reporting Agency). Продукт запрещено использовать для принятия юридически значимых решений о найме на работу, выдаче кредитов, аренде жилья или страховании.
+        </p>
+
+        <p style="margin-bottom: 10px;">
+          <b>Section 230 CDA & Defamation Protection:</b> Чтобы исключить клевету и травлю (libel/defamation), сервис на первом этапе НЕ использует свободные текстовые отзывы. Учитываются только числовые агрегированные параметры.
+        </p>
+
+        <p style="margin-bottom: 10px;">
+          <b>CCPA / CPRA & Privacy Rules:</b> Номер телефона является базовым идентификатором. Личная информация (ФИО, фото, адрес) публично НЕ публикуется.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    feather.replace();
+  </script>
+</body>
+</html>
