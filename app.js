@@ -20,7 +20,7 @@ const CRITERIA_MAP = [
 const CONTACTS_DATA = [
   {
     id: 'alex',
-    name: 'Александр (Инвестор)',
+    name: 'Александр',
     phone: '+7 (999) 456-78-90',
     hasRating: true,
     totalReviews: 42,
@@ -31,7 +31,7 @@ const CONTACTS_DATA = [
   },
   {
     id: 'dmitry',
-    name: 'Дмитрий (Риелтор)',
+    name: 'Дмитрий',
     phone: '+7 (916) 777-88-99',
     hasRating: true,
     totalReviews: 18,
@@ -42,7 +42,7 @@ const CONTACTS_DATA = [
   },
   {
     id: 'suspicious',
-    name: 'Сергей (Перекуп)',
+    name: 'Сергей',
     phone: '+7 (903) 666-13-13',
     hasRating: true,
     totalReviews: 12,
@@ -53,7 +53,7 @@ const CONTACTS_DATA = [
   },
   {
     id: 'elena',
-    name: 'Елена (Дизайнер)',
+    name: 'Елена',
     phone: '+7 (926) 333-44-55',
     hasRating: false,
     totalReviews: 0,
@@ -64,7 +64,7 @@ const CONTACTS_DATA = [
   },
   {
     id: 'igor',
-    name: 'Игорь (Курьер)',
+    name: 'Игорь',
     phone: '+7 (905) 123-99-88',
     hasRating: false,
     totalReviews: 1, // Below minimum 3 ratings threshold
@@ -78,7 +78,7 @@ const CONTACTS_DATA = [
 // USER'S OWN PROFILE DATA
 const MY_PROFILE_DATA = {
   id: 'my_profile',
-  name: 'Вы (Владелец)',
+  name: 'Вы',
   phone: '+7 (900) 111-22-33',
   hasRating: true,
   totalReviews: 27,
