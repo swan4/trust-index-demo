@@ -12,20 +12,6 @@
   <!-- Main App Container -->
   <div class="app-wrapper" id="app-wrapper">
 
-    <!-- NON-DISMISSIBLE STICKY SMS NOTIFICATION BANNER AT TOP -->
-    <div class="sticky-sms-banner">
-      <div class="sms-banner-icon">💬</div>
-      <div class="sms-banner-text">
-        <div class="sms-banner-title">
-          <span>SMS: Новое анонимное мнение</span>
-          <span class="sms-banner-tag">Нельзя скрыть</span>
-        </div>
-        <div class="sms-banner-sub">
-          «Ваш номер <b>+7 (900) 111-22-33</b> получил новую оценку в Trust Index! Посмотрите ваш рейтинг ниже.»
-        </div>
-      </div>
-    </div>
-
     <!-- App Header with Search -->
     <header class="app-header">
       <div class="header-top">
@@ -34,9 +20,31 @@
           <span>Trust Index</span>
         </div>
         <div class="header-actions">
+          <button class="icon-btn" onclick="toggleNotifications()" id="btn-bell" title="Уведомления">
+            <i data-feather="bell"></i>
+            <span class="badge-dot" id="notif-badge"></span>
+          </button>
           <button class="icon-btn" onclick="openLegalModal()" title="Правовая информация">
             <i data-feather="info"></i>
           </button>
+        </div>
+      </div>
+
+      <!-- Notifications Dropdown Popover -->
+      <div class="notif-dropdown" id="notif-dropdown">
+        <div class="notif-dropdown-header">
+          <span>Уведомления</span>
+          <button class="notif-clear-btn" onclick="dismissNotifications()">Скрыть все</button>
+        </div>
+        <div class="notif-dropdown-body" id="notif-list">
+          <div class="notif-item">
+            <div class="notif-item-icon">💬</div>
+            <div class="notif-item-content">
+              <div class="notif-item-title">Новая анонимная оценка</div>
+              <div class="notif-item-sub">«Ваш номер +7 (900) 111-22-33 получил отзыв в Trust Index.»</div>
+              <div class="notif-item-time">5 мин. назад</div>
+            </div>
+          </div>
         </div>
       </div>
 

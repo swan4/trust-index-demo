@@ -539,20 +539,17 @@ function openLegalModal() {
   openModal('modal-legal');
 }
 
-function toggleDeviceMode(mode) {
-  const wrapper = document.getElementById('app-wrapper');
-  const btnFrame = document.getElementById('btn-device-frame');
-  const btnFull = document.getElementById('btn-full-screen');
-
-  if (mode === 'frame') {
-    wrapper.classList.add('device-frame');
-    wrapper.classList.remove('full-screen');
-    btnFrame.classList.add('active');
-    btnFull.classList.remove('active');
-  } else {
-    wrapper.classList.remove('device-frame');
-    wrapper.classList.add('full-screen');
-    btnFull.classList.add('active');
-    btnFrame.classList.remove('active');
+// NOTIFICATION BELL TOGGLE & DISMISS
+function toggleNotifications() {
+  const dropdown = document.getElementById('notif-dropdown');
+  if (dropdown) {
+    dropdown.classList.toggle('open');
   }
+}
+
+function dismissNotifications() {
+  const badge = document.getElementById('notif-badge');
+  const dropdown = document.getElementById('notif-dropdown');
+  if (badge) badge.style.display = 'none';
+  if (dropdown) dropdown.classList.remove('open');
 }
