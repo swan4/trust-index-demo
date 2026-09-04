@@ -107,11 +107,11 @@ let searchQuery = '';
 let selectedContactId = null;
 let isContactsSynced = false;
 
-// Calculate Overall Trust Score (e.g. 9)
+// Calculate Overall Trust Score (e.g. 9.23)
 function calculateTrustScore(profile) {
   const keys = Object.keys(profile.ratings);
   const avg = keys.reduce((sum, key) => sum + profile.ratings[key], 0) / keys.length;
-  return Math.round(avg);
+  return avg.toFixed(2);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -311,7 +311,7 @@ function renderContactDetailView(container) {
               <div class="trust-stat-cell">
                 <div class="trust-stat-header">
                   <span class="trust-stat-title">${h.name}</span>
-                  <span class="trust-stat-val ${h.val >= 8 ? 'high' : h.val >= 5 ? 'med' : 'low'}">${Math.round(h.val)}</span>
+                  <span class="trust-stat-val ${h.val >= 8 ? 'high' : h.val >= 5 ? 'med' : 'low'}">${h.val.toFixed(2)}</span>
                 </div>
                 <div class="trust-mini-bar">
                   <div class="trust-mini-fill" style="width: ${h.val * 10}%;"></div>
@@ -354,7 +354,7 @@ function renderContactDetailView(container) {
                   <i data-feather="${c.icon}" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
                   ${c.name}
                 </div>
-                <div class="criteria-val">${Math.round(val)}</div>
+                <div class="criteria-val">${val.toFixed(2)}</div>
               </div>
               <div class="bar-track">
                 <div class="bar-fill" style="width: ${val * 10}%;"></div>
@@ -415,7 +415,7 @@ function renderMyProfileView(container) {
             <div class="trust-stat-cell">
               <div class="trust-stat-header">
                 <span class="trust-stat-title">${h.name}</span>
-                <span class="trust-stat-val high">${Math.round(h.val)}</span>
+                <span class="trust-stat-val high">${h.val.toFixed(2)}</span>
               </div>
               <div class="trust-mini-bar">
                 <div class="trust-mini-fill" style="width: ${h.val * 10}%;"></div>
@@ -455,7 +455,7 @@ function renderMyProfileView(container) {
                 <i data-feather="${c.icon}" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
                 ${c.name}
               </div>
-              <div class="criteria-val">${Math.round(val)}</div>
+              <div class="criteria-val">${val.toFixed(2)}</div>
             </div>
             <div class="bar-track">
               <div class="bar-fill" style="width: ${val * 10}%;"></div>
