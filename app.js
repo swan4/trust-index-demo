@@ -111,6 +111,7 @@ let currentTab = 'contacts'; // 'contacts' | 'my-profile' | 'detail'
 let contactFilter = 'rated'; // 'rated' | 'unrated'
 let searchQuery = '';
 let selectedContactId = null;
+let isContactsSynced = false;
 
 // Calculate Overall Trust Score (e.g. 8.8 / 10)
 function calculateTrustScore(profile) {
@@ -184,7 +185,23 @@ function renderContactsListView(container) {
     return matchesSearch && matchesFilter;
   });
 
-  let html = `
+  let html = '';
+
+  if (!isContactsSynced) {
+    html += `
+      <div style="background: rgba(245, 196, 83, 0.12); border: 1px solid var(--border-gold); border-radius: 14px; padding: 10px 14px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <div style="font-size: 12px; font-weight: 700; color: var(--primary-gold); flex: 1;">⚠️ Данные контактов не актуальны</div>
+          <div style="font-size: 10px; color: var(--text-muted);">Разрешите доступ для обновления рейтингов</div>
+        </div>
+        <button class="contacts-btn" style="position: static;" onclick="openSyncPermissionModal()">
+          Синхронизировать
+        </button>
+      </div>
+    `;
+  }
+
+  html += `
     <div class="filter-pills-bar">
       <div class="filter-pill ${contactFilter === 'rated' ? 'active' : ''}" onclick="setContactFilter('rated')">
         ⭐ С рейтингом (${CONTACTS_DATA.filter(c => c.hasRating).length})
@@ -557,6 +574,35 @@ function dismissNotifications() {
 // INITIAL ONBOARDING RATING NOTIFICATION HANDLER
 function viewMyRatingOnboarding() {
   closeModal('modal-welcome-notif');
+  // Immediately open contact sync permission popup!
+  openModal('modal-sync-permission');
+}
+
+// CONTACT SYNC PERMISSION HANDLERS
+function openSyncPermissionModal() {
+  openModal('modal-sync-permission');
+}
+
+function allowContactSync() {
+  const btn = document.getElementById('btn-allow-sync');
+  if (btn) {
+    btn.innerHTML = '<span>⏳ Синхронизация записной книги...</span>';
+    btn.disabled = true;
+  }
+
+  setTimeout(() => {
+    isContactsSynced = true;
+    closeModal('modal-sync-permission');
+    if (btn) {
+      btn.innerHTML = '<span>Разрешить и синхронизировать</span>';
+      btn.disabled = false;
+    }
+    switchTab('contacts');
+  }, 1000);
+}
+
+function skipContactSync() {
+  closeModal('modal-sync-permission');
   switchTab('my-profile');
 }
 

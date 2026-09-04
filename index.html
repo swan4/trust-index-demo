@@ -104,6 +104,28 @@
   </div>
 
   <!-- ==========================================================================
+       CENTER MODAL: SYNC CONTACTS PERMISSION (ALLOW / REQUEST ACCESS)
+       ========================================================================== -->
+  <div class="modal-backdrop" id="modal-sync-permission" style="align-items: center;">
+    <div class="center-modal">
+      <div class="center-modal-icon">📇</div>
+      <div class="center-modal-title">Синхронизировать контакты?</div>
+      <div class="center-modal-text" style="margin-bottom: 12px;">
+        Данные рейтинга ваших контактов устарели. Разрешите доступ к телефонной книге, чтобы видеть актуальные сигналы.
+      </div>
+      <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 12px; padding: 10px; font-size: 11px; color: var(--text-muted); margin-bottom: 16px;">
+        🛡️ <b>Приватность:</b> Номера хэшируются. Ваша телефонная книга НЕ станет частью публичной базы.
+      </div>
+      <button class="btn-primary" id="btn-allow-sync" style="width: 100%; height: 48px; margin-bottom: 8px;" onclick="allowContactSync()">
+        <span>Разрешить и синхронизировать</span>
+      </button>
+      <button class="btn-secondary" style="width: 100%; height: 40px;" onclick="skipContactSync()">
+        Пропустить
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
        BOTTOM SHEET MODAL: ADD / EDIT ANONYMOUS RATING (10 CRITERIA)
        ========================================================================== -->
   <div class="modal-backdrop" id="modal-rating">
