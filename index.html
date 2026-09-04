@@ -88,6 +88,22 @@
 
 
   <!-- ==========================================================================
+       CENTER MODAL: INITIAL WELCOME RATING NOTIFICATION
+       ========================================================================== -->
+  <div class="modal-backdrop open" id="modal-welcome-notif" style="align-items: center;">
+    <div class="center-modal">
+      <div class="center-modal-icon">⭐</div>
+      <div class="center-modal-title">Вам оставлен новый отзыв!</div>
+      <div class="center-modal-text">
+        Кто-то из ваших контактов оставил анонимную оценку вашего номера <b style="color: var(--primary-gold);">+7 (900) 111-22-33</b> в Trust Index.
+      </div>
+      <button class="btn-primary" style="width: 100%; height: 48px; margin-top: 16px;" onclick="viewMyRatingOnboarding()">
+        Посмотреть мой рейтинг →
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
        BOTTOM SHEET MODAL: ADD / EDIT ANONYMOUS RATING (10 CRITERIA)
        ========================================================================== -->
   <div class="modal-backdrop" id="modal-rating">

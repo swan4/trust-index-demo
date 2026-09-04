@@ -553,3 +553,9 @@ function dismissNotifications() {
   if (badge) badge.style.display = 'none';
   if (dropdown) dropdown.classList.remove('open');
 }
+
+// INITIAL ONBOARDING RATING NOTIFICATION HANDLER
+function viewMyRatingOnboarding() {
+  closeModal('modal-welcome-notif');
+  switchTab('my-profile');
+}
