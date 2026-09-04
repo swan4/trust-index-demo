@@ -559,3 +559,11 @@ function viewMyRatingOnboarding() {
   closeModal('modal-welcome-notif');
   switchTab('my-profile');
 }
+
+// GO TO HOME / MAIN SCREEN HANDLER
+function goToHome() {
+  searchQuery = '';
+  const searchInput = document.getElementById('global-search-input');
+  if (searchInput) searchInput.value = '';
+  switchTab('contacts');
+}
