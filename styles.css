@@ -569,6 +569,84 @@ body {
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(245, 196, 83, 0.15);
 }
 
+/* Dynamic Score Themes: Gold (9+), Green (7-8.99), Blue (5-6.99), Red (<5) */
+.trust-card.score-gold {
+  border-color: var(--primary-gold);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 25px rgba(245, 196, 83, 0.25);
+}
+.trust-card.score-gold .trust-score-num {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.trust-card.score-green {
+  border-color: var(--accent-emerald);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 25px rgba(16, 185, 129, 0.25);
+}
+.trust-card.score-green .trust-score-num {
+  color: var(--accent-emerald);
+  background: none;
+  -webkit-text-fill-color: var(--accent-emerald);
+}
+
+.trust-card.score-blue {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.25);
+}
+.trust-card.score-blue .trust-score-num {
+  color: var(--accent-cyan);
+  background: none;
+  -webkit-text-fill-color: var(--accent-cyan);
+}
+
+.trust-card.score-red {
+  border-color: var(--accent-rose);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 25px rgba(244, 63, 94, 0.25);
+}
+.trust-card.score-red .trust-score-num {
+  color: var(--accent-rose);
+  background: none;
+  -webkit-text-fill-color: var(--accent-rose);
+}
+
+/* Rating Badge Color Themes */
+.contact-rating-badge.score-gold {
+  background: rgba(245, 196, 83, 0.15);
+  color: var(--primary-gold);
+  border-color: rgba(245, 196, 83, 0.4);
+}
+
+.contact-rating-badge.score-green {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-emerald);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+.contact-rating-badge.score-blue {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-cyan);
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.contact-rating-badge.score-red {
+  background: rgba(244, 63, 94, 0.15);
+  color: var(--accent-rose);
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+/* Stat Val & Criteria Color Classes */
+.trust-stat-val.score-gold, .criteria-val.score-gold { color: var(--primary-gold); }
+.trust-stat-val.score-green, .criteria-val.score-green { color: var(--accent-emerald); }
+.trust-stat-val.score-blue, .criteria-val.score-blue { color: var(--accent-cyan); }
+.trust-stat-val.score-red, .criteria-val.score-red { color: var(--accent-rose); }
+
+/* Progress Bar Fill Colors matching Score Color Scheme */
+.bar-fill.score-gold, .trust-mini-fill.score-gold { background: var(--gold-gradient); }
+.bar-fill.score-green, .trust-mini-fill.score-green { background: var(--accent-emerald); }
+.bar-fill.score-blue, .trust-mini-fill.score-blue { background: var(--accent-cyan); }
+.bar-fill.score-red, .trust-mini-fill.score-red { background: var(--accent-rose); }
+
 /* Card Header: Score & Badge */
 .trust-card-header {
   display: flex;

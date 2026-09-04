@@ -24,8 +24,6 @@ const CONTACTS_DATA = [
     phone: '+7 (999) 456-78-90',
     hasRating: true,
     totalReviews: 42,
-    tier: 'ВЫСОКИЙ УРОВЕНЬ ДОВЕРИЯ',
-    tierClass: 'verified-badge',
     ratings: {
       honesty: 9.2, decency: 9.0, responsibility: 8.8, promises: 8.9, financial: 9.5,
       communication: 8.6, punctuality: 8.4, no_brag: 7.9, negotiability: 8.7, repeat_intent: 9.1
@@ -37,8 +35,6 @@ const CONTACTS_DATA = [
     phone: '+7 (916) 777-88-99',
     hasRating: true,
     totalReviews: 18,
-    tier: 'НАДЕЖНЫЙ ПАРТНЕР',
-    tierClass: 'tier-badge',
     ratings: {
       honesty: 7.8, decency: 7.5, responsibility: 7.9, promises: 7.4, financial: 8.0,
       communication: 7.6, punctuality: 7.2, no_brag: 6.8, negotiability: 8.2, repeat_intent: 7.5
@@ -50,8 +46,6 @@ const CONTACTS_DATA = [
     phone: '+7 (903) 666-13-13',
     hasRating: true,
     totalReviews: 12,
-    tier: 'ПОДОЗРИТЕЛЬНЫЙ НОМЕР',
-    tierClass: 'risk-badge',
     ratings: {
       honesty: 3.2, decency: 3.5, responsibility: 2.9, promises: 3.1, financial: 3.8,
       communication: 4.0, punctuality: 3.0, no_brag: 2.1, negotiability: 4.2, repeat_intent: 3.0
@@ -63,8 +57,6 @@ const CONTACTS_DATA = [
     phone: '+7 (926) 333-44-55',
     hasRating: false,
     totalReviews: 0,
-    tier: 'НОВЫЙ НОМЕР',
-    tierClass: 'tier-badge',
     ratings: {
       honesty: 5.0, decency: 5.0, responsibility: 5.0, promises: 5.0, financial: 5.0,
       communication: 5.0, punctuality: 5.0, no_brag: 5.0, negotiability: 5.0, repeat_intent: 5.0
@@ -76,8 +68,6 @@ const CONTACTS_DATA = [
     phone: '+7 (905) 123-99-88',
     hasRating: false,
     totalReviews: 1, // Below minimum 3 ratings threshold
-    tier: 'НЕДОСТАТОЧНО ОЦЕНОК',
-    tierClass: 'tier-badge',
     ratings: {
       honesty: 6.0, decency: 6.0, responsibility: 6.0, promises: 6.0, financial: 6.0,
       communication: 6.0, punctuality: 6.0, no_brag: 6.0, negotiability: 6.0, repeat_intent: 6.0
@@ -92,8 +82,6 @@ const MY_PROFILE_DATA = {
   phone: '+7 (900) 111-22-33',
   hasRating: true,
   totalReviews: 27,
-  tier: 'МОЙ ПРОФИЛЬ',
-  tierClass: 'verified-badge',
   ratings: {
     honesty: 9.4, decency: 9.1, responsibility: 9.0, promises: 9.3, financial: 9.2,
     communication: 9.5, punctuality: 8.9, no_brag: 8.8, negotiability: 9.0, repeat_intent: 9.6
@@ -112,6 +100,15 @@ function calculateTrustScore(profile) {
   const keys = Object.keys(profile.ratings);
   const avg = keys.reduce((sum, key) => sum + profile.ratings[key], 0) / keys.length;
   return avg.toFixed(2);
+}
+
+// Get Score Theme Color Class: Gold (9+), Green (7-8.99), Blue (5-6.99), Red (<5)
+function getScoreThemeClass(scoreVal) {
+  const num = parseFloat(scoreVal);
+  if (isNaN(num) || num < 5.0) return 'score-red';
+  if (num < 7.0) return 'score-blue';
+  if (num < 9.0) return 'score-green';
+  return 'score-gold';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -221,6 +218,7 @@ function renderContactsListView(container) {
     html += list.map(c => {
       const score = calculateTrustScore(c);
       const initial = c.name.charAt(0);
+      const themeClass = getScoreThemeClass(score);
       return `
         <div class="contact-item-card" onclick="openContactDetail('${c.id}')">
           <div class="contact-left">
@@ -233,7 +231,7 @@ function renderContactsListView(container) {
 
           <div>
             ${c.hasRating ? `
-              <div class="contact-rating-badge">
+              <div class="contact-rating-badge ${themeClass}">
                 ★ ${score}
               </div>
             ` : `
@@ -250,11 +248,12 @@ function renderContactsListView(container) {
   container.innerHTML = html;
 }
 
-// RENDER CONTACT DETAIL VIEW (CLEAN REPUTATION CARD)
+// RENDER CONTACT DETAIL VIEW (CLEAN REPUTATION CARD WITH DYNAMIC SCORE COLORS)
 function renderContactDetailView(container) {
   const contact = CONTACTS_DATA.find(c => c.id === selectedContactId) || CONTACTS_DATA[0];
   const trustScore = calculateTrustScore(contact);
   const isBelowThreshold = contact.totalReviews < 3;
+  const themeClass = isBelowThreshold ? '' : getScoreThemeClass(trustScore);
 
   const highlights = [
     { name: 'Честность', val: contact.ratings.honesty },
@@ -271,9 +270,9 @@ function renderContactDetailView(container) {
       <span>Вернуться к контактам</span>
     </div>
 
-    <!-- Clean Trust Index Reputation Card -->
+    <!-- Clean Trust Index Reputation Card with Dynamic Color Theme -->
     <div class="trust-card-container">
-      <div class="trust-card">
+      <div class="trust-card ${themeClass}">
         
         <div class="trust-card-header">
           <div class="trust-score-box">
@@ -281,9 +280,6 @@ function renderContactDetailView(container) {
           </div>
 
           <div class="trust-card-badge-box">
-            <span class="tier-badge ${contact.tierClass}">
-              ${contact.tier}
-            </span>
             <span class="reviews-count-badge">
               <i data-feather="users" style="width: 12px; height: 12px;"></i>
               ${contact.totalReviews} оценок
@@ -311,10 +307,10 @@ function renderContactDetailView(container) {
               <div class="trust-stat-cell">
                 <div class="trust-stat-header">
                   <span class="trust-stat-title">${h.name}</span>
-                  <span class="trust-stat-val ${h.val >= 8 ? 'high' : h.val >= 5 ? 'med' : 'low'}">${h.val.toFixed(2)}</span>
+                  <span class="trust-stat-val ${getScoreThemeClass(h.val)}">${h.val.toFixed(2)}</span>
                 </div>
                 <div class="trust-mini-bar">
-                  <div class="trust-mini-fill" style="width: ${h.val * 10}%;"></div>
+                  <div class="trust-mini-fill ${getScoreThemeClass(h.val)}" style="width: ${h.val * 10}%;"></div>
                 </div>
               </div>
             `).join('')}
@@ -347,6 +343,7 @@ function renderContactDetailView(container) {
       <div class="criteria-list">
         ${CRITERIA_MAP.map(c => {
           const val = contact.ratings[c.id] || 5.0;
+          const themeClass = getScoreThemeClass(val);
           return `
             <div class="criteria-card">
               <div class="criteria-header">
@@ -354,10 +351,10 @@ function renderContactDetailView(container) {
                   <i data-feather="${c.icon}" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
                   ${c.name}
                 </div>
-                <div class="criteria-val">${val.toFixed(2)}</div>
+                <div class="criteria-val ${themeClass}">${val.toFixed(2)}</div>
               </div>
               <div class="bar-track">
-                <div class="bar-fill" style="width: ${val * 10}%;"></div>
+                <div class="bar-fill ${themeClass}" style="width: ${val * 10}%;"></div>
               </div>
             </div>
           `;
@@ -373,6 +370,7 @@ function renderContactDetailView(container) {
 function renderMyProfileView(container) {
   const profile = MY_PROFILE_DATA;
   const trustScore = calculateTrustScore(profile);
+  const themeClass = getScoreThemeClass(trustScore);
 
   const highlights = [
     { name: 'Честность', val: profile.ratings.honesty },
@@ -386,7 +384,7 @@ function renderMyProfileView(container) {
   let html = `
     <!-- Clean Trust Index Reputation Card -->
     <div class="trust-card-container">
-      <div class="trust-card">
+      <div class="trust-card ${themeClass}">
         
         <div class="trust-card-header">
           <div class="trust-score-box">
@@ -394,9 +392,6 @@ function renderMyProfileView(container) {
           </div>
 
           <div class="trust-card-badge-box">
-            <span class="tier-badge ${profile.tierClass}">
-              ${profile.tier}
-            </span>
             <span class="reviews-count-badge">
               <i data-feather="users" style="width: 12px; height: 12px;"></i>
               ${profile.totalReviews} оценок
@@ -415,10 +410,10 @@ function renderMyProfileView(container) {
             <div class="trust-stat-cell">
               <div class="trust-stat-header">
                 <span class="trust-stat-title">${h.name}</span>
-                <span class="trust-stat-val high">${h.val.toFixed(2)}</span>
+                <span class="trust-stat-val ${getScoreThemeClass(h.val)}">${h.val.toFixed(2)}</span>
               </div>
               <div class="trust-mini-bar">
-                <div class="trust-mini-fill" style="width: ${h.val * 10}%;"></div>
+                <div class="trust-mini-fill ${getScoreThemeClass(h.val)}" style="width: ${h.val * 10}%;"></div>
               </div>
             </div>
           `).join('')}
@@ -448,6 +443,7 @@ function renderMyProfileView(container) {
     <div class="criteria-list">
       ${CRITERIA_MAP.map(c => {
         const val = profile.ratings[c.id] || 5.0;
+        const themeClass = getScoreThemeClass(val);
         return `
           <div class="criteria-card">
             <div class="criteria-header">
@@ -455,10 +451,10 @@ function renderMyProfileView(container) {
                 <i data-feather="${c.icon}" style="width: 14px; height: 14px; color: var(--accent-cyan);"></i>
                 ${c.name}
               </div>
-              <div class="criteria-val">${val.toFixed(2)}</div>
+              <div class="criteria-val ${themeClass}">${val.toFixed(2)}</div>
             </div>
             <div class="bar-track">
-              <div class="bar-fill" style="width: ${val * 10}%;"></div>
+              <div class="bar-fill ${themeClass}" style="width: ${val * 10}%;"></div>
             </div>
           </div>
         `;
