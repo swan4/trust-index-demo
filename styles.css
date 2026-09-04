@@ -100,8 +100,8 @@ body {
 
 /* Mobile Status Bar */
 .status-bar {
-  height: 40px;
-  padding: 6px 20px 0 20px;
+  height: 38px;
+  padding: 4px 20px 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -115,13 +115,70 @@ body {
 
 .status-bar .notch {
   width: 110px;
-  height: 20px;
+  height: 18px;
   background: #000;
   border-bottom-left-radius: 14px;
   border-bottom-right-radius: 14px;
 }
 
-/* Device Mode Switcher Float (Positioned neatly outside on desktop or non-obstructive) */
+/* NON-DISMISSIBLE STICKY SMS NOTIFICATION BANNER */
+.sticky-sms-banner {
+  background: linear-gradient(90deg, rgba(245, 196, 83, 0.15) 0%, rgba(56, 189, 248, 0.12) 100%);
+  border-bottom: 1px solid var(--border-gold);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 45;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.sms-banner-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--gold-gradient);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-size: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(245, 196, 83, 0.4);
+}
+
+.sms-banner-text {
+  flex: 1;
+}
+
+.sms-banner-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-gold);
+  margin-bottom: 2px;
+}
+
+.sms-banner-tag {
+  font-size: 9px;
+  font-weight: 800;
+  background: rgba(245, 196, 83, 0.2);
+  padding: 2px 6px;
+  border-radius: 10px;
+  color: var(--primary-gold);
+  text-transform: uppercase;
+}
+
+.sms-banner-sub {
+  font-size: 11px;
+  color: var(--text-main);
+  line-height: 1.35;
+}
+
+/* Device Mode Switcher Float */
 .device-toggle-bar {
   position: fixed;
   top: 20px;
@@ -159,17 +216,146 @@ body {
 }
 
 /* ==========================================================================
-   Header & Search
+   Header & Filter Bar
    ========================================================================== */
 
 .app-header {
-  padding: 14px 20px 14px 20px;
+  padding: 12px 20px 12px 20px;
   background: linear-gradient(180deg, #121827 0%, rgba(11, 15, 25, 0.95) 100%);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-glass);
   position: sticky;
   top: 0;
   z-index: 40;
+}
+
+/* Filter Pills: With Rating vs Without Rating */
+.filter-pills-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: var(--bg-surface);
+  padding: 4px;
+  border-radius: 14px;
+  border: 1px solid var(--border-glass);
+}
+
+.filter-pill {
+  flex: 1;
+  text-align: center;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.filter-pill.active {
+  background: var(--gold-gradient);
+  color: #0d121f;
+  box-shadow: 0 4px 12px rgba(245, 196, 83, 0.25);
+}
+
+/* Contact List Card Styling */
+.contact-item-card {
+  background: var(--bg-card-dark);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.contact-item-card:hover {
+  background: #1a2336;
+  border-color: var(--border-gold);
+  transform: translateY(-2px);
+}
+
+.contact-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contact-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1.5px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--primary-gold);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contact-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.contact-phone {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.contact-rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 13px;
+  background: rgba(245, 196, 83, 0.12);
+  color: var(--primary-gold);
+  border: 1px solid rgba(245, 196, 83, 0.3);
+}
+
+.contact-rating-badge.no-rating {
+  background: rgba(100, 116, 139, 0.15);
+  color: var(--text-dim);
+  border-color: rgba(100, 116, 139, 0.3);
+  font-size: 11px;
+}
+
+/* Detail Profile View Top Back Button */
+.back-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: var(--accent-cyan);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.back-header:hover {
+  text-decoration: underline;
 }
 
 .header-top {
